@@ -1,96 +1,451 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 html, body {
+    min-height: 100vh;
     margin: 0;
     padding: 0;
     font-family: 'Rubik', sans-serif;
-    background-color: #EEF0F4;
+    background-color: #FFF8F0;
     color: #432000;
     user-select: none;
 }
 
+/* ── Auth Screen ────────────────────────────────────── */
 .container {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 450px;
+    margin: auto;
+    text-align: center;
+    gap: 12px;
+    padding: 20px;
+}
+
+.container h1 { margin: 5px 0; }
+.container p  { opacity: 0.8; margin-bottom: 10px; }
+
+.logo { width: 140px; margin-bottom: 10px; }
+
+#login-btn,
+#yahoo-login-btn {
+    width: 100%;
     max-width: 320px;
-    margin: 30px auto;
 }
 
-img {
-    width: 150px;
-    margin: 0 auto;
-}
-
+/* ── Base Elements ──────────────────────────────────── */
 input {
     color: #432000;
-    background-color: #DCE1EB;
-    border: 0;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 20px;
-    text-align: center;
+    background-color: #FFFFFF;
+    border: 1.5px solid #E8D8C8;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 17px;
     font-family: 'Rubik', sans-serif;
-    margin: 10px 0;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    border-color: #E67E22;
 }
 
 button {
-    color: #FDFDFD;
-    background-color: #AC485A;
-    border: 0;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 20px;
-    text-align: center;
+    color: white;
+    background-color: #E67E22;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 17px;
     font-family: 'Rubik', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s;
 }
 
 button:hover {
-    background-color: #432000;
-    cursor: pointer;
-    margin-bottom: 10px;
+    background-color: #D35400;
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
 ul li {
-    font-size: 20px;
+    font-size: 17px;
     background-color: #FFFDF8;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 14px 18px;
+    border-radius: 10px;
     flex-grow: 1;
     text-align: center;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2)
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: background-color 0.15s;
 }
 
 ul li:hover {
     background-color: #FFECC7;
-    cursor: pointer;
 }
 
-.top-bar {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding: 20px;
-}
-
-.shopping-container {
-
-    max-width: 600px;
-
-    margin: auto;
-
-    padding: 20px;
-}
-
-#app-screen{
+/* ── App Screen ─────────────────────────────────────── */
+#app-screen {
     display: none;
+    min-height: 100vh;
+    background-color: #FFF8F0;
+}
+
+/* Top bar */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.title-block {
+    flex: 1;
+    text-align: center;
+}
+
+.title-block h2 {
+    margin: 0;
+    font-size: 19px;
+}
+
+.top-bar-spacer {
+    width: 44px; /* mirrors .menu-btn width so the title stays centred */
+}
+
+.menu-btn {
+    width: auto;
+    max-width: none;
+    background: transparent;
+    color: #432000;
+    font-size: 22px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    line-height: 1;
+}
+
+.menu-btn:hover {
+    background-color: #FFF0E0;
+    transform: none;
+}
+
+/* Shopping container */
+.shopping-container {
+    max-width: 680px;
+    margin: 30px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+}
+
+/* Input + button sit in a flex row */
+.input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: stretch;
+}
+
+.input-row input {
+    flex: 1;
+    min-width: 0; /* prevents overflow in flex */
+    text-align: left;
+}
+
+.input-row button {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+#loading-message {
+    text-align: center;
+    opacity: 0.55;
+    font-size: 15px;
+    margin: 8px 0;
+}
+
+/* Empty state – inside the <ul> but visually neutral */
+.empty-state {
+    flex-grow: 0;
+    width: 100%;
+    text-align: center;
+    opacity: 0.45;
+    cursor: default;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 28px 0 !important;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+/* ── Overlay  (single, clean — no duplicate z-index) ── */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 900;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* ── Drawer ─────────────────────────────────────────── */
+.drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 270px;
+    height: 100%;
+    background: white;
+    z-index: 1000;
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.12);
+    overflow-y: auto;
+}
+
+.drawer.open {
+    transform: translateX(0);
+}
+
+.drawer-logo {
+    width: 52px;
+    margin-bottom: 10px;
+}
+
+.drawer-header {
+    margin-bottom: 16px;
+}
+
+#user-name {
+    font-weight: 500;
+    font-size: 16px;
+    margin: 0 0 3px 0;
+}
+
+#user-email {
+    font-size: 13px;
+    opacity: 0.6;
+    margin: 0;
+}
+
+.drawer hr {
+    border: none;
+    border-top: 1px solid #F0E4D8;
+    margin: 0 0 14px 0;
+}
+
+/* Drawer nav buttons */
+.drawer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.drawer-nav button {
+    width: 100%;
+    max-width: none;
+    background-color: #FFF8F0;
+    color: #432000;
+    font-size: 15px;
+    padding: 12px 14px;
+    text-align: left;
+    border-radius: 10px;
+    border: 1px solid #F0E4D8;
+}
+
+.drawer-nav button:hover {
+    background-color: #FFECC7;
+    transform: none;
+    border-color: #E8C8A0;
+}
+
+/* Logout button – distinct destructive style */
+.drawer-bottom {
+    padding-top: 14px;
+    border-top: 1px solid #F0E4D8;
+    margin-top: 14px;
+}
+
+.drawer-bottom button {
+    width: 100%;
+    max-width: none;
+    background-color: white;
+    color: #C0392B;
+    border: 1.5px solid #E0B8B2;
+    font-size: 15px;
+    padding: 12px;
+}
+
+.drawer-bottom button:hover {
+    background-color: #FFF5F5;
+    transform: none;
+}
+
+/* ── Edit Profile Modal ─────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.52);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.modal {
+    background: white;
+    border-radius: 16px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 390px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal h2 {
+    margin: 0;
+    font-size: 19px;
+    color: #432000;
+}
+
+.modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+
+.modal-field label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    opacity: 0.6;
+}
+
+.modal-field input {
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 16px;
+}
+
+.modal-field input:disabled {
+    background-color: #F8F4F0;
+    color: #998878;
+    border-color: #EAD8C8;
+    cursor: not-allowed;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.modal-actions button {
+    flex: 1;
+    max-width: none;
+    font-size: 16px;
+    padding: 12px;
+}
+
+.btn-secondary {
+    background-color: white !important;
+    color: #432000 !important;
+    border: 1.5px solid #D8C8B8 !important;
+}
+
+.btn-secondary:hover {
+    background-color: #FFF8F0 !important;
+    transform: none !important;
+}
+
+/* ── Toast notification ─────────────────────────────── */
+.toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #432000;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 3000;
+    white-space: nowrap;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 600px) {
+    .shopping-container {
+        margin: 15px;
+        padding: 18px 15px;
+    }
+
+    .input-row {
+        flex-direction: column;
+    }
+
+    .input-row input,
+    .input-row button {
+        width: 100%;
+    }
 }

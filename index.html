@@ -1,11 +1,11 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <title>Grocery Helper</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -14,58 +14,67 @@
     </head>
     <body>
 
+        <!-- ── Auth Screen ──────────────────────────────── -->
         <div id="auth-screen" class="container">
-
-            <img src="assets/ct.png" alt="Logo">
-
+            <img class="logo" src="assets/ct.png" alt="Grocery Helper Logo">
             <h1>Grocery Helper</h1>
-
-            <p>
-                Sign in to manage your shopping lists.
-            </p>
-
-            <button id="login-btn">
-                Login with Google
-            </button>
-            <button id="yahoo-login-btn">
-                Login with Yahoo
-            </button>
-
+            <p>Sign in to manage your shopping lists.</p>
+            <button id="login-btn">Login with Google</button>
+            <button id="yahoo-login-btn">Login with Yahoo</button>
         </div>
 
+        <!-- ── App Screen ──────────────────────────────── -->
         <div id="app-screen">
 
             <div class="top-bar">
-
-                <div>
-
+                <button id="menu-btn" class="menu-btn">☰</button>
+                <div class="title-block">
                     <h2>Grocery Helper</h2>
+                </div>
+                <!-- Spacer mirrors menu-btn so h2 is truly centred -->
+                <div class="top-bar-spacer"></div>
+            </div>
 
-                    <p id="user-info"></p>
+            <!-- Drawer backdrop (single, no duplicate z-index) -->
+            <div id="overlay" class="overlay"></div>
 
+            <!-- Drawer -->
+            <div id="drawer" class="drawer">
+
+                <div class="drawer-header">
+                    <img src="assets/ct.png" class="drawer-logo" alt="Logo">
+                    <p id="user-name"></p>
+                    <p id="user-email"></p>
                 </div>
 
-                <button id="logout-btn">
-                    Logout
-                </button>
+                <hr>
+
+                <div class="drawer-nav">
+                    <button id="history-btn">&nbsp; History</button>
+                    <button id="edit-profile-btn">&nbsp; Edit Profile</button>
+                </div>
+
+                <div class="drawer-bottom">
+                    <button id="logout-btn">Logout</button>
+                </div>
 
             </div>
 
+            <!-- Shopping area -->
             <div class="shopping-container">
 
-                <input
-                    type="text"
-                    id="input-field"
-                    placeholder="Enter item"
-                >
+                <!-- Flex row: input + button side-by-side on desktop, stacked on mobile -->
+                <div class="input-row">
+                    <input
+                        type="text"
+                        id="input-field"
+                        placeholder="Enter item…"
+                        autocomplete="off"
+                    >
+                    <button id="add-button">Add To Cart</button>
+                </div>
 
-                <button id="add-button">
-                    Add To Cart
-                </button>
-
-                <p id="loading-message">
-                    Loading...
-                </p>
+                <p id="loading-message">Loading…</p>
 
                 <ul id="shopping-list"></ul>
 
@@ -73,7 +82,31 @@
 
         </div>
 
-        <script src="app.js" type="module"></script>
+        <!-- ── Edit Profile Modal ──────────────────────── -->
+        <div id="edit-profile-modal" class="modal-overlay">
+            <div class="modal">
+                <h2>Edit Profile</h2>
 
+                <div class="modal-field">
+                    <label for="edit-name-input">Display Name</label>
+                    <input type="text" id="edit-name-input" placeholder="Your name" autocomplete="off">
+                </div>
+
+                <div class="modal-field">
+                    <label for="edit-email-input">Email</label>
+                    <input type="email" id="edit-email-input" disabled>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-secondary" id="cancel-edit-btn">Cancel</button>
+                    <button id="save-profile-btn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div id="toast" class="toast"></div>
+
+        <script src="app.js" type="module"></script>
     </body>
 </html>
