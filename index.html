@@ -13,13 +13,67 @@
         <link rel="stylesheet" href="app.css">
     </head>
     <body>
-        <div class="container">
-            <img src="assets/ct.png">
-            <input type="text" id="input-field" placeholder="Enter the item">
-            <button id="add-button">Add to cart</button>
-            <p id="loading-message">Loading...</p>
-            <ul id="shopping-list"></ul>
+
+        <div id="auth-screen" class="container">
+
+            <img src="assets/ct.png" alt="Logo">
+
+            <h1>Grocery Helper</h1>
+
+            <p>
+                Sign in to manage your shopping lists.
+            </p>
+
+            <button id="login-btn">
+                Login with Google
+            </button>
+            <button id="yahoo-login-btn">
+                Login with Yahoo
+            </button>
+
         </div>
+
+        <div id="app-screen">
+
+            <div class="top-bar">
+
+                <div>
+
+                    <h2>Grocery Helper</h2>
+
+                    <p id="user-info"></p>
+
+                </div>
+
+                <button id="logout-btn">
+                    Logout
+                </button>
+
+            </div>
+
+            <div class="shopping-container">
+
+                <input
+                    type="text"
+                    id="input-field"
+                    placeholder="Enter item"
+                >
+
+                <button id="add-button">
+                    Add To Cart
+                </button>
+
+                <p id="loading-message">
+                    Loading...
+                </p>
+
+                <ul id="shopping-list"></ul>
+
+            </div>
+
+        </div>
+
         <script src="app.js" type="module"></script>
+
     </body>
 </html>
