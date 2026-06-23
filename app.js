@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, remove, set } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 import {
     getAuth,
     GoogleAuthProvider,
@@ -28,7 +28,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const database = getDatabase(app)
-const shoppingListInDB = ref(database, "shoppingList")
+let shoppingListInDB = null
 
 const inputFieldEl = document.getElementById("input-field")
 const addButtonEl = document.getElementById("add-button")
@@ -118,6 +118,18 @@ onAuthStateChanged(auth, (user) => {
             user.email ||
             "User"
         }`
+        set(
+            ref(
+                database,
+                `users/${user.uid}/profile`
+            ),
+            {
+                name: user.displayName || "",
+                email: user.email || ""
+            }
+        )
+        shoppingListInDB = ref(database, `users/${user.uid}/shoppingList`)
+        loadShoppingList()
 
     } else {
 
@@ -140,23 +152,36 @@ addButtonEl.addEventListener("click", function() {
     clearInputFieldEl()
 })
 
-onValue(shoppingListInDB, function(snapshot) {
-    
-    loadingMessageEl.style.display = "none"
+function loadShoppingList() {
 
-    clearShoppingListEl()
+    onValue(
+        shoppingListInDB,
+        function(snapshot) {
 
-    if (snapshot.exists()) {
-        let itemsArray = Object.entries(snapshot.val())
-    
-        
-        for (let i = 0; i < itemsArray.length; i++) {
-            appendItemToShoppingListEl(itemsArray[i])
-        }    
-    } else {
-        shoppingListEl.innerHTML = "No items here... yet"
-    }
-})
+            loadingMessageEl.style.display = "none"
+
+            clearShoppingListEl()
+
+            if(snapshot.exists()) {
+
+                let itemsArray =
+                    Object.entries(snapshot.val())
+
+                for(let i = 0; i < itemsArray.length; i++) {
+
+                    appendItemToShoppingListEl(
+                        itemsArray[i]
+                    )
+                }
+
+            } else {
+
+                shoppingListEl.innerHTML =
+                    "No items here... yet"
+            }
+        }
+    )
+}
 
 function clearShoppingListEl() {
     shoppingListEl.innerHTML = ""
@@ -175,7 +200,7 @@ function appendItemToShoppingListEl(item) {
     newEl.textContent = itemValue
     
     newEl.addEventListener("click", function() {
-        let exactLocationOfItemInDB = ref(database, `shoppingList/${itemID}`)
+        let exactLocationOfItemInDB =ref(database,`users/${auth.currentUser.uid}/shoppingList/${itemID}`)
         
         remove(exactLocationOfItemInDB)
     })
