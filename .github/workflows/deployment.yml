@@ -1,4 +1,4 @@
-name: Completed Phase 2 Production
+name: Completed Phase 3 Production
 
 on:
   push:
@@ -19,4 +19,4 @@ jobs:
 
       - name: Mark Deployment
         run: |
-          echo "Production deployment Phase 2C updated for UI Redesign"
+          echo "Every item is now added as per the basket and history section is also updated."

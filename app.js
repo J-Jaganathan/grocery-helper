@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
-import { getDatabase, ref, push, onValue, remove, set } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, remove, set, get } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 import {
     getAuth,
     GoogleAuthProvider,
@@ -51,6 +51,13 @@ const saveProfileBtn    = document.getElementById("save-profile-btn")
 const editNameInput     = document.getElementById("edit-name-input")
 const editEmailInput    = document.getElementById("edit-email-input")
 const toastEl           = document.getElementById("toast")
+const checkoutBtn = document.getElementById("checkout-btn")
+const historyBtn = document.getElementById("history-btn")
+const historyScreen = document.getElementById("history-screen")
+const shoppingScreen = document.getElementById("shopping-screen")
+const backBtn = document.getElementById("back-btn")
+const historyList =document.getElementById("history-list")
+
 
 // ── Auth ───────────────────────────────────────────────
 loginBtn.addEventListener("click", async () => {
@@ -154,6 +161,30 @@ function loadShoppingList() {
     })
 }
 
+function loadHistory() {
+
+    const user = auth.currentUser
+    if(!user) return
+    const historyRef = ref(database, `users/${user.uid}/purchaseHistory`)
+    onValue(
+        historyRef,
+        snapshot => {
+            historyList.innerHTML = ""
+            if(!snapshot.exists()) {
+                historyList.innerHTML =
+                    `
+                    <p>
+                        No purchase history yet
+                    </p>
+                    `
+                return
+            }
+            const history = Object.entries(snapshot.val()).reverse()
+            history.forEach(([id,data]) => {renderHistoryCard(data)})
+        }
+    )
+}
+
 function appendItemToList([itemID, itemValue]) {
     const li = document.createElement("li")
     li.textContent = itemValue
@@ -233,12 +264,60 @@ saveProfileBtn.addEventListener("click", async () => {
     }
 })
 
+historyBtn.addEventListener("click",() => {
+        closeDrawer()
+        shoppingScreen.style.display = "none"
+        historyScreen.style.display = "block"
+        loadHistory()
+    }
+)
+
+backBtn.addEventListener("click",() => {
+        historyScreen.style.display = "none"
+        shoppingScreen.style.display = "block"
+    }
+)
+
+checkoutBtn.addEventListener("click",checkoutBasket)
+
 function openModal() {
     editProfileModal.classList.add("show")
 }
 
 function closeModal() {
     editProfileModal.classList.remove("show")
+}
+
+async function checkoutBasket() {
+    const user =auth.currentUser
+    if(!user) return
+    const snapshot = await get(shoppingListInDB)
+
+    if(!snapshot.exists()) {
+        showToast("Basket is empty")
+        return
+    }
+
+    const items = Object.values(snapshot.val())
+
+    await push(ref(
+            database,
+            `users/${user.uid}/purchaseHistory`),
+            {createdAt:Date.now(),items}
+    )
+
+    const entries = Object.entries(snapshot.val())
+
+    for(const [id] of entries) {
+        await remove(
+            ref(
+                database,
+                `users/${user.uid}/shoppingList/${id}`
+            )
+        )
+    }
+
+    showToast("Basket checked out ✓")
 }
 
 // ── Toast ──────────────────────────────────────────────
@@ -249,4 +328,35 @@ function showToast(message, duration = 2800) {
     toastEl.classList.add("show")
     clearTimeout(toastTimer)
     toastTimer = setTimeout(() => toastEl.classList.remove("show"), duration)
+}
+
+function renderHistoryCard(data) {
+    const card = document.createElement("div")
+    card.className = "history-card"
+    const date = new Date(data.createdAt)
+    const formattedDate = date.toLocaleString()
+
+    const itemsHtml = data.items.map(
+                            item => `
+                            <span
+                                class="history-tag">
+
+                                ${item}
+
+                            </span>
+                            `
+                        )
+                        .join("")
+
+    card.innerHTML = `
+        <div
+            class="history-date">
+            ${formattedDate}
+        </div>
+        <div
+            class="history-items">
+            ${itemsHtml}
+        </div>
+    `
+    historyList.append(card)
 }

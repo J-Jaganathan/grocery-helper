@@ -433,6 +433,47 @@ ul li:hover {
     transform: translateX(-50%) translateY(0);
 }
 
+#checkout-btn {
+    width: 100%;
+    margin-bottom: 20px;
+    background: #27AE60;
+}
+
+#checkout-btn:hover {
+    background: #1E8449;
+}
+
+#history-screen {
+    min-height: 100vh;
+}
+
+.history-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.history-date {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 12px;
+}
+
+.history-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.history-tag {
+    background: #FFF0E0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 600px) {
     .shopping-container {

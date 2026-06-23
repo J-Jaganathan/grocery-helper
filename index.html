@@ -25,61 +25,95 @@
 
         <!-- ── App Screen ──────────────────────────────── -->
         <div id="app-screen">
-
-            <div class="top-bar">
-                <button id="menu-btn" class="menu-btn">☰</button>
-                <div class="title-block">
-                    <h2>Grocery Helper</h2>
+            <div id="shopping-screen">
+                <div class="top-bar">
+                    <button id="menu-btn" class="menu-btn">☰</button>
+                    <div class="title-block">
+                        <h2>Grocery Helper</h2>
+                    </div>
+                    <!-- Spacer mirrors menu-btn so h2 is truly centred -->
+                    <div class="top-bar-spacer"></div>
                 </div>
-                <!-- Spacer mirrors menu-btn so h2 is truly centred -->
-                <div class="top-bar-spacer"></div>
+
+                <!-- Drawer backdrop (single, no duplicate z-index) -->
+                <div id="overlay" class="overlay"></div>
+
+                <!-- Drawer -->
+                <div id="drawer" class="drawer">
+
+                    <div class="drawer-header">
+                        <img src="assets/ct.png" class="drawer-logo" alt="Logo">
+                        <p id="user-name"></p>
+                        <p id="user-email"></p>
+                    </div>
+
+                    <hr>
+
+                    <div class="drawer-nav">
+                        <button id="history-btn">&nbsp; History</button>
+                        <button id="edit-profile-btn">&nbsp; Edit Profile</button>
+                    </div>
+
+                    <div class="drawer-bottom">
+                        <button id="logout-btn">Logout</button>
+                    </div>
+
+                </div>
+
+                <!-- Shopping area -->
+                <div class="shopping-container">
+
+                    <!-- Flex row: input + button side-by-side on desktop, stacked on mobile -->
+                    <div class="input-row">
+                        <input
+                            type="text"
+                            id="input-field"
+                            placeholder="Enter item…"
+                            autocomplete="off"
+                        >
+                        <button id="add-button">Add To Cart</button>
+                    </div>
+                    <button id="checkout-btn">
+                        Checkout Basket
+                    </button>
+
+                    <p id="loading-message">Loading…</p>
+
+                    <ul id="shopping-list"></ul>
+
+                </div>
             </div>
+            <div id="history-screen" style="display:none;">
 
-            <!-- Drawer backdrop (single, no duplicate z-index) -->
-            <div id="overlay" class="overlay"></div>
+                <div class="top-bar">
 
-            <!-- Drawer -->
-            <div id="drawer" class="drawer">
+                    <button
+                        id="back-btn"
+                        class="menu-btn">
 
-                <div class="drawer-header">
-                    <img src="assets/ct.png" class="drawer-logo" alt="Logo">
-                    <p id="user-name"></p>
-                    <p id="user-email"></p>
+                        ←
+
+                    </button>
+
+                    <div class="title-block">
+
+                        <h2>
+                            Purchase History
+                        </h2>
+
+                    </div>
+
+                    <div class="top-bar-spacer"></div>
+
                 </div>
 
-                <hr>
+                <div class="shopping-container">
 
-                <div class="drawer-nav">
-                    <button id="history-btn">&nbsp; History</button>
-                    <button id="edit-profile-btn">&nbsp; Edit Profile</button>
-                </div>
+                    <div id="history-list"></div>
 
-                <div class="drawer-bottom">
-                    <button id="logout-btn">Logout</button>
                 </div>
 
             </div>
-
-            <!-- Shopping area -->
-            <div class="shopping-container">
-
-                <!-- Flex row: input + button side-by-side on desktop, stacked on mobile -->
-                <div class="input-row">
-                    <input
-                        type="text"
-                        id="input-field"
-                        placeholder="Enter item…"
-                        autocomplete="off"
-                    >
-                    <button id="add-button">Add To Cart</button>
-                </div>
-
-                <p id="loading-message">Loading…</p>
-
-                <ul id="shopping-list"></ul>
-
-            </div>
-
         </div>
 
         <!-- ── Edit Profile Modal ──────────────────────── -->
