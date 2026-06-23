@@ -1,0 +1,22 @@
+name: Updated Production Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Production
+      url: https://grocerylist-notetaking.netlify.app
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Mark Deployment
+        run: |
+          echo "Production deployment Phase 2A updated"
